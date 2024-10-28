@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(CalculatorApp());
@@ -14,13 +15,42 @@ class CalculatorApp extends StatelessWidget {
   }
 }
 
-class CalculatorScreen extends StatelessWidget {
-  final List<String> buttons = [
-    '7', '8', '9', 'C', 'AC',
-    '4', '5', '6', '+', '-',
-    '1', '2', '3', '*', '/',
-    '0', '00', '.', '=',
-  ];
+class CalculatorScreen extends StatefulWidget {
+  @override
+  _CalculatorScreenState createState() => _CalculatorScreenState();
+}
+
+class _CalculatorScreenState extends State<CalculatorScreen> {
+  String expression = '';
+  String result = '0';
+
+  void buttonPressed(String buttonText) {
+    debugPrint("Button pressed: $buttonText");
+    setState(() {
+      if (buttonText == 'AC') {
+        expression = '';
+        result = '0';
+      } else if (buttonText == 'C') {
+        if (expression.isNotEmpty) {
+          expression = expression.substring(0, expression.length - 1);
+        }
+      } else if (buttonText == '=') {
+        try {
+          // Parse and evaluate the expression
+          Parser parser = Parser();
+          Expression exp = parser.parse(expression);
+          ContextModel cm = ContextModel();
+          double eval = exp.evaluate(EvaluationType.REAL, cm);
+          result = eval.toString();
+        } catch (e) {
+          result = 'Error';
+        }
+      } else {
+        // Build expression with button presses
+        expression += buttonText;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +75,11 @@ class CalculatorScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        "0", // Placeholder for expression
+                        expression,
                         style: TextStyle(color: Colors.white, fontSize: 24.0),
                       ),
                       Text(
-                        "0", // Placeholder for result
+                        result,
                         style: TextStyle(color: Colors.white, fontSize: 48.0, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -72,9 +102,7 @@ class CalculatorScreen extends StatelessWidget {
                     String buttonText = buttons[index];
                     return CalculatorButton(
                       text: buttonText,
-                      onTap: () {
-                        debugPrint("Button pressed: $buttonText");
-                      },
+                      onTap: () => buttonPressed(buttonText),
                     );
                   },
                 ),
@@ -85,6 +113,13 @@ class CalculatorScreen extends StatelessWidget {
       ),
     );
   }
+
+  final List<String> buttons = [
+    '7', '8', '9', 'C', 'AC',
+    '4', '5', '6', '+', '-',
+    '1', '2', '3', '*', '/',
+    '0', '00', '.', '=',
+  ];
 }
 
 class CalculatorButton extends StatelessWidget {
