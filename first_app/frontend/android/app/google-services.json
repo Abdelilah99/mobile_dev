@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "644493075311",
+    "project_id": "foodix-3dc25",
+    "storage_bucket": "foodix-3dc25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644493075311:android:f38fa0183ec72f7579be9a",
+        "android_client_info": {
+          "package_name": "com.example.first_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAekKyYhhk4FRFEhmXF7VU1T4-c-0wd0gE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
